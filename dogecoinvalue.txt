@@ -1,6 +1,7 @@
-Current value of DOGE in BTC: Cryptsy: 0.00000104 -- Volume: 306308734.00246745 Today's trend: down #dogecoin 
-Current value of DOGE in BTC: Vircurex: 0.00000102 -- Volume: 2363734.29850889 Today's trend: down #dogecoin 
-Current value of DOGE in BTC: COINS-E: 0.00000105 -- Volume: 7170637.81292208 Today's trend: stable #dogecoin 
-Current value of DOGE in BTC: BTER: 0.00000104 -- Volume: 31730244.028 Today's trend: down #dogecoin 
-Current value of DOGE in BTC: mintpal: 0.00000103 -- Volume: Unknown Today's trend: down #dogecoin 
-Current approx. value of 1M DOGE in USD: 451.911 #dogecoin 
+Current value of DOGE in BTC: Cryptsy: 0.00000099 -- Volume: 261377388.84724525 Today's trend: stable 
+Current value of DOGE in BTC: Vircurex: 0.00000099 -- Volume: 2586643.79921667 Today's trend: stable 
+Current value of DOGE in BTC: COINS-E: 0.00000099 -- Volume: 4078847.10043895 Today's trend: stable 
+Current value of DOGE in BTC: BTER: 0.00000099 -- Volume: 42781884.699 Today's trend: down 
+Current value of DOGE in BTC: mintpal: 0.00000099 -- Volume: Unknown Today's trend: down 
+Current approx. value of 1M DOGE in USD: 443.8071 #dogecoin 
+Direct message me with the name of one of the exchanges I check to get more current information 

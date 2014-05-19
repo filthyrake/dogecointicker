@@ -27,23 +27,23 @@ coinbasedata = json.load(coinbaseresponse)
 mintpalresponse = urllib2.urlopen('https://api.mintpal.com/v1/market/stats/DOGE/BTC')
 mintpaldata = json.load(mintpalresponse)
 
-f2 = open('/root/dogecointicker/cryptsytrend.txt','r')
+f2 = open('/path/to/cryptsytrend.txt','r')
 f2v = f2.readline()
 f2.close()
 
-f3 = open('/root/dogecointicker/vircurextrend.txt','r')
+f3 = open('/path/to/vircurextrend.txt','r')
 f3v = f3.readline()
 f3.close()
 
-f4 = open('/root/dogecointicker/coinsetrend.txt','r')
+f4 = open('/path/to/coinsetrend.txt','r')
 f4v = f4.readline()
 f4.close()
 
-f5 = open('/root/dogecointicker/btertrend.txt','r')
+f5 = open('/path/to/btertrend.txt','r')
 f5v = f5.readline()
 f5.close()
 
-f6 = open('/root/dogecointicker/mintpaltrend.txt','r')
+f6 = open('/path/to/mintpaltrend.txt','r')
 f6v = f6.readline()
 f6.close()
 
@@ -92,7 +92,7 @@ if bterdata["last"] < lowest:
 if mintpaldata[0]["last_price"] < lowest:
 	lowest = mintpaldata[0]["last_price"]
 
-f = open('/root/dogecointicker/coinbasevalue.txt','w')
+f = open('/path/to/coinbasevalue.txt','w')
 f.write('Average Dogecoin value' + lowest + '\n')
 milliondoge = float(lowest)*1000000
 dogeinusd = milliondoge * float(coinbasedata['subtotal']['amount'])
@@ -100,11 +100,31 @@ f.write('value of 1m DOGE in USD' + str(dogeinusd) + '\n')
 f.close()
 
 f = open('/root/dogecointicker/dogecoinvalue.txt','w')
-f.write('Current value of DOGE in BTC:' +' Cryptsy: ' + cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"] + " -- Volume: " + cryptsydata["return"]["markets"]["DOGE"]["volume"] + " Today's trend: " + cryptsytrend + " #dogecoin \n")
-f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + " -- Volume: " + vircurexvoldata["value"] + " Today's trend: " + vircurextrend + " #dogecoin \n")
-f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend + " #dogecoin \n")
-f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend + " #dogecoin \n")
-f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend + " #dogecoin \n")
+f.write('Current value of DOGE in BTC:' +' Cryptsy: ' + cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"] + " -- Volume: " + cryptsydata["return"]["markets"]["DOGE"]["volume"] + " Today's trend: " + cryptsytrend + " \n")
+f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + " -- Volume: " + vircurexvoldata["value"] + " Today's trend: " + vircurextrend + " \n")
+f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend + " \n")
+f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend + " \n")
+f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend + " \n")
 f.write('Current approx. value of 1M DOGE in USD: ' + str(dogeinusd) + " #dogecoin \n")
+f.write('Direct message me with the name of one of the exchanges I check to get more current information \n')
 f.close()
 
+f = open('/path/to/cryptsyvalue.txt','w')
+f.write('Current value of DOGE in BTC:' +' Cryptsy: ' + cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"] + " -- Volume: " + cryptsydata["return"]["markets"]["DOGE"]["volume"] + " Today's trend: " + cryptsytrend)
+f.close()
+
+f = open('/path/to/vircurexvalue.txt','w')
+f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + " -- Volume: " + vircurexvoldata["value"] + " Today's trend: " + vircurextrend)
+f.close()
+
+f = open('/path/to/coinsevalue.txt','w')
+f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend)
+f.close()
+
+f = open('/path/to/btervalue.txt','w')
+f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend)
+f.close()
+
+f = open('/path/to/mintpalvalue.txt','w')
+f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend)
+f.close()
