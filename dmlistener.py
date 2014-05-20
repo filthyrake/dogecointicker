@@ -1,7 +1,3 @@
-# Dogecoin Ticker Twitter Bot
-# Written by Damen Knight
-# Copyright 2014
-
 import tweepy, time, sys
 import json
 import urllib2
@@ -20,35 +16,35 @@ api = tweepy.API(auth)
 messages = api.direct_messages()
 
 for message in messages:
-	if message.text.lower() == "cryptsy":
+	if message.text.lower().find("cryptsy") != -1:
 		filename=open('/path/to/cryptsyvalue.txt','r')
 		f=filename.readline()
 		filename.close()
 		reply = f
 		user = message.sender_id
 		api.send_direct_message(user, text=reply)
-	if message.text.lower() == "vircurex":
+	if message.text.lower().find("vircurex") != -1:
                 filename=open('/path/to/vircurexvalue.txt','r')
                 f=filename.readline()
                 filename.close()
                 reply = f
                 user = message.sender_id
                 api.send_direct_message(user, text=reply)
-        if message.text.lower() == "bter":
+        if message.text.lower().find("bter") != -1:
                 filename=open('/path/to/btervalue.txt','r')
                 f=filename.readline()
                 filename.close()
                 reply = f
                 user = message.sender_id
                 api.send_direct_message(user, text=reply)
-        if (message.text.lower() == "coins-e") or (message.text.lower() == "coinse"):
+        if (message.text.lower().find("coins-e") != -1) or (message.text.lower().find("coinse") != -1):
                 filename=open('/path/to/coinsevalue.txt','r')
                 f=filename.readline()
                 filename.close()
                 reply = f
                 user = message.sender_id
                 api.send_direct_message(user, text=reply)
-        if message.text.lower() == "mintpal":
+        if message.text.lower().find("mintpal") != -1:
                 filename=open('/path/to/mintpalvalue.txt','r')
                 f=filename.readline()
                 filename.close()
