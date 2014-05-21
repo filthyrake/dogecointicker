@@ -3,13 +3,17 @@
 # Copyright 2014
 
 import tweepy, time, sys
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.read("/path/to/appconfig")
 
 argfile = str(sys.argv[1])
 
-CONSUMER_KEY = '<consumer_key>'
-CONSUMER_SECRET = '<consumer_secret>'
-ACCESS_KEY = '<access_key>'
-ACCESS_SECRET = '<access_secret>'
+CONSUMER_KEY = config.get('appconfig','consumer_key')
+CONSUMER_SECRET = config.get('appconfig','consumer_secret')
+ACCESS_KEY = config.get('appconfig','access_key')
+ACCESS_SECRET = config.get('appconfig','access_secret')
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
