@@ -6,7 +6,6 @@ import tweepy, time, sys
 import json
 import urllib2
 import os
-
 import ConfigParser
 
 config = ConfigParser.ConfigParser()
@@ -16,6 +15,7 @@ CONSUMER_KEY = config.get('appconfig','consumer_key')
 CONSUMER_SECRET = config.get('appconfig','consumer_secret')
 ACCESS_KEY = config.get('appconfig','access_key')
 ACCESS_SECRET = config.get('appconfig','access_secret')
+
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)

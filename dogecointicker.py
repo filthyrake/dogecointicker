@@ -8,12 +8,12 @@ import ConfigParser
 config = ConfigParser.ConfigParser()
 config.read("/path/to/appconfig")
 
-argfile = str(sys.argv[1])
-
 CONSUMER_KEY = config.get('appconfig','consumer_key')
 CONSUMER_SECRET = config.get('appconfig','consumer_secret')
 ACCESS_KEY = config.get('appconfig','access_key')
 ACCESS_SECRET = config.get('appconfig','access_secret')
+
+argfile = str(sys.argv[1])
 
 auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
 auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)

@@ -8,6 +8,13 @@ Copyright 2014
 
 Installation/usage instructions
 
+This version features MySQL!!  
+
+Create a database in mysql, put the relevant info in the appconfig file, and then run the initialize.py script to create your tables.
+
+This is clearly still a work-in-progress, but this branch is for the refactor of code to get rid of all the text files and migrate everything to MySQL.
+
+
 setup the following cron jobs (with changes made as appropriate for your paths and the location of the scripts):
 
 
@@ -34,4 +41,4 @@ Modify all appropriate python files and replace /path/to/ with the correct paths
 Modify the crontab listings and replace /path/to/ with the correct paths for wherever you put the files
 
 
-Requires: ConfigParser, tweepy
+Requires: ConfigParser, tweepy, MySQLdb

@@ -1,4 +1,11 @@
+[dbconfig]
+host = <hostname>
+dbname = <name of db>
+dbpass = <db password>
+dbuser = <db user>
+
 [appconfig]
+exchanges=cryptsy,vircurex,bter,coins-e,mintpal
 consumer_key = <consumer_key>
 consumer_secret = <consumer_secret>
 access_key = <access_key>

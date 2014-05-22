@@ -5,6 +5,20 @@ from __future__ import print_function
 import json
 import urllib2
 import os
+import MySQLdb
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.read("/path/to/appconfig")
+username = config.get('dbconfig','dbuser')
+password = config.get('dbconfig','dbpass')
+dbname = config.get('dbconfig','dbname')
+dbhost = config.get('dbconfig','host')
+exchanges = config.get('appconfig','exchanges')
+exchanges = exchanges.split(',')
+
+db = MySQLdb.connect(dbhost, username, password, dbname)
+cursor = db.cursor()
 
 cryptsyresponse = urllib2.urlopen('http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=132')
 cryptsydata = json.load(cryptsyresponse)
@@ -27,59 +41,73 @@ coinbasedata = json.load(coinbaseresponse)
 mintpalresponse = urllib2.urlopen('https://api.mintpal.com/v1/market/stats/DOGE/BTC')
 mintpaldata = json.load(mintpalresponse)
 
-f2 = open('/path/to/cryptsytrend.txt','r')
-f2v = f2.readline()
-f2.close()
+#Get the initial day values from the DB
+dayvalue = "SELECT DAYVALUE FROM exchanges WHERE NAME = %s"
+cursor.execute(dayvalue, ("cryptsy"))
+cryptsydayvalue = cursor.fetchone()[0]
 
-f3 = open('/path/to/vircurextrend.txt','r')
-f3v = f3.readline()
-f3.close()
+cursor.execute(dayvalue, ("vircurex"))
+vircurexdayvalue = cursor.fetchone()[0]
 
-f4 = open('/path/to/coinsetrend.txt','r')
-f4v = f4.readline()
-f4.close()
+cursor.execute(dayvalue, ("coins-e"))
+coinsedayvalue = cursor.fetchone()[0]
 
-f5 = open('/path/to/btertrend.txt','r')
-f5v = f5.readline()
-f5.close()
+cursor.execute(dayvalue, ("bter"))
+bterdayvalue = cursor.fetchone()[0]
 
-f6 = open('/path/to/mintpaltrend.txt','r')
-f6v = f6.readline()
-f6.close()
+cursor.execute(dayvalue, ("mintpal"))
+mintpaldayvalue = cursor.fetchone()[0]
 
-if f2v < cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]:
+#Set Current Values in the DB
+currentvaluesql = "UPDATE exchanges SET CURRENTVALUE = %s WHERE NAME = %s"
+cursor.execute(currentvaluesql, (cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"], "cryptsy"))
+cursor.execute(currentvaluesql, (vircurexdata["value"], "vircurex"))
+cursor.execute(currentvaluesql, (coinsedata["bid"], "coins-e"))
+cursor.execute(currentvaluesql, (bterdata["last"], "bter"))
+cursor.execute(currentvaluesql, (mintpaldata[0]["last_price"], "mintpal"))
+
+#Set Current Volumes in the DB
+volumesql = "UPDATE exchanges SET VOLUME = %s WHERE NAME = %s"
+cursor.execute(volumesql, (cryptsydata["return"]["markets"]["DOGE"]["volume"], "cryptsy"))
+cursor.execute(volumesql, (vircurexvoldata["value"], "vircurex"))
+cursor.execute(volumesql, (coinsedata["total_ask_q"], "coins-e"))
+cursor.execute(volumesql, (bterdata["vol_doge"], "bter"))
+
+db.close()
+
+if cryptsydayvalue < cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]:
 	cryptsytrend = "up"
-if f2v == cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]:
+if cryptsydayvalue == cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]:
 	cryptsytrend = "stable"
-if f2v > cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]:
+if cryptsydayvalue > cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]:
 	cryptsytrend = "down"
 
-if f3v < vircurexdata["value"]:
+if vircurexdayvalue < vircurexdata["value"]:
 	vircurextrend = "up"
-if f3v == vircurexdata["value"]:
+if vircurexdayvalue == vircurexdata["value"]:
 	vircurextrend = "stable"
-if f3v > vircurexdata["value"]:
+if vircurexdayvalue > vircurexdata["value"]:
 	vircurextrend = "down"
 
-if f4v < coinsedata["bid"]:
+if coinsedayvalue < coinsedata["bid"]:
 	coinsetrend = "up"
-if f4v == coinsedata["bid"]:
+if coinsedayvalue == coinsedata["bid"]:
 	coinsetrend = "stable"
-if f4v > coinsedata["bid"]:
+if coinsedayvalue > coinsedata["bid"]:
 	coinsetrend = "down"
 
-if f5v < bterdata["last"]:
+if bterdayvalue < bterdata["last"]:
 	btertrend = "up"
-if f5v == bterdata["last"]:
+if bterdayvalue == bterdata["last"]:
 	btertrend = "stable"
-if f5v > bterdata["last"]:
+if bterdayvalue > bterdata["last"]:
 	btertrend = "down"
 
-if f6v < mintpaldata[0]["last_price"]:
+if mintpaldayvalue < mintpaldata[0]["last_price"]:
 	mintpaltrend = "up"
-if f6v == mintpaldata[0]["last_price"]:
+if mintpaldayvalue == mintpaldata[0]["last_price"]:
 	mintpaltrend = "stable"
-if f6v > mintpaldata[0]["last_price"]:
+if mintpaldayvalue > mintpaldata[0]["last_price"]:
 	mintpaltrend = "down"
 
 lowest = cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]
@@ -99,7 +127,7 @@ dogeinusd = milliondoge * float(coinbasedata['subtotal']['amount'])
 f.write('value of 1m DOGE in USD' + str(dogeinusd) + '\n')
 f.close()
 
-f = open('/root/dogecointicker/dogecoinvalue.txt','w')
+f = open('/path/to/dogecoinvalue.txt','w')
 f.write('Current value of DOGE in BTC:' +' Cryptsy: ' + cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"] + " -- Volume: " + cryptsydata["return"]["markets"]["DOGE"]["volume"] + " Today's trend: " + cryptsytrend + " \n")
 f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + " -- Volume: " + vircurexvoldata["value"] + " Today's trend: " + vircurextrend + " \n")
 f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend + " \n")

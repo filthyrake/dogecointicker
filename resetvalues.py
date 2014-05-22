@@ -5,9 +5,24 @@
 from __future__ import print_function
 import json
 import urllib2
+import MySQLdb
+import ConfigParser
+
+config = ConfigParser.ConfigParser()
+config.read("/path/to/appconfig")
+username = config.get('dbconfig','dbuser')
+password = config.get('dbconfig','dbpass')
+dbname = config.get('dbconfig','dbname')
+dbhost = config.get('dbconfig','host')
+exchanges = config.get('appconfig','exchanges')
+exchanges = exchanges.split(',')
+
+db = MySQLdb.connect(dbhost, username, password, dbname)
+cursor = db.cursor()
 
 cryptsyresponse = urllib2.urlopen('http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=132')
 cryptsydata = json.load(cryptsyresponse)
+cryptsydayvalue = cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]
 vircurexurl = 'https://api.vircurex.com/api/get_highest_bid.json?base=DOGE&alt=BTC'
 vircurexvolurl = 'https://api.vircurex.com/api/get_volume.json?base=DOGE&alt=BTC'
 vircurexreq = urllib2.Request(vircurexurl, headers={"User-Agent" : "DogeCoin Ticker"})
@@ -25,13 +40,16 @@ bterdata = json.load(bterresponse)
 mintpalresponse = urllib2.urlopen('https://api.mintpal.com/v1/market/stats/DOGE/BTC')
 mintpaldata = json.load(mintpalresponse)
 
+
+db.close()
+
 f = open('/path/to/cryptsytrend.txt','w')
 f.write(cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"])
 f.close()
 f = open('/path/to/vircurextrend.txt','w')
 f.write(vircurexdata["value"])
 f.close()
-f = open('/path/tocoinsetrend.txt','w')
+f = open('/path/to/coinsetrend.txt','w')
 f.write(coinsedata["bid"])
 f.close()
 f = open('/path/to/btertrend.txt','w')
