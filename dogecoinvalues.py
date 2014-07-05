@@ -111,7 +111,7 @@ f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + 
 f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend + " \n")
 f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend + " \n")
 f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend + " \n")
-f.write('Current approx. value of 1M DOGE in USD: ' + str(dogeinusd) + " values from " + lowexchange + " + coinbase" + " #dogecoin \n")
+f.write('Current approx. value of 1M DOGE in USD: $' + str(dogeinusd) + " values from " + lowexchange + " + coinbase" + " #dogecoin \n")
 f.write('Direct message me with the name of one of the exchanges I check to get more current information \n')
 f.close()
 
