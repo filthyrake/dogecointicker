@@ -83,14 +83,20 @@ if f6v > mintpaldata[0]["last_price"]:
 	mintpaltrend = "down"
 
 lowest = cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]
+lowexchange = "cryptsy"
 if vircurexdata["value"] < lowest:
-	lowest = vircurexdata["value"]
+        lowest = vircurexdata["value"]
+        lowexchange = "vircurex"
 if coinsedata["bid"] < lowest:
-	lowest = coinsedata["bid"]
+        lowest = coinsedata["bid"]
+        lowexchange = "coins-e"
 if bterdata["last"] < lowest:
-	lowest = bterdata["last"]
+        lowest = bterdata["last"]
+        lowexchange = "bter"
 if mintpaldata[0]["last_price"] < lowest:
-	lowest = mintpaldata[0]["last_price"]
+        lowest = mintpaldata[0]["last_price"]
+        lowexchange = "mintpal"
+
 
 f = open('/path/to/coinbasevalue.txt','w')
 f.write('Average Dogecoin value' + lowest + '\n')
@@ -105,7 +111,7 @@ f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + 
 f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend + " \n")
 f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend + " \n")
 f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend + " \n")
-f.write('Current approx. value of 1M DOGE in USD: ' + str(dogeinusd) + " #dogecoin \n")
+f.write('Current approx. value of 1M DOGE in USD: ' + str(dogeinusd) + " values from " + lowexchange + " + coinbase" + " #dogecoin \n")
 f.write('Direct message me with the name of one of the exchanges I check to get more current information \n')
 f.close()
 
