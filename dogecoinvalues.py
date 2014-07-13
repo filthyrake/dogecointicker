@@ -1,6 +1,8 @@
 # Dogecoin Ticker Twitter Bot
 # Written by Damen Knight
 # Copyright 2014
+#
+
 from __future__ import print_function
 import json
 import urllib2
