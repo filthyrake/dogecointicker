@@ -27,5 +27,5 @@ for status in tweepy.Cursor(api.user_timeline).items():
 	api.destroy_status(status.id)
  
 for line in f:
-	api.update_status(line)
+	api.update_status(status=line)
 	time.sleep(30)#Tweet every 30 seconds
