@@ -7,6 +7,11 @@ import json
 import urllib2
 import MySQLdb
 import ConfigParser
+import ctypes
+libc = ctypes.cdll.LoadLibrary('libc.so.6')
+res_init = libc.__res_init
+
+res_init()
 
 config = ConfigParser.ConfigParser()
 config.read("/path/to/appconfig")
@@ -105,19 +110,6 @@ cursor.execute(initcurrentvalues, (bterdata["last"], "bter"))
 #set the VOLUME for bter
 cursor.execute(initvolume, (bterdata["vol_doge"], "bter"))
 
-mintpalresponse = urllib2.urlopen('https://api.mintpal.com/v1/market/stats/DOGE/BTC')
-
-#set the URL for mintpal
-cursor.execute(initurls, ("https://api.mintpal.com/v1/market/stats/DOGE/BTC", "mintpal"))
-
-mintpaldata = json.load(mintpalresponse)
-
-#set the DAYVALUE and CURRENTVALUE for mintpal
-cursor.execute(initdayvalues, (mintpaldata[0]["last_price"], "mintpal"))
-cursor.execute(initcurrentvalues, (mintpaldata[0]["last_price"], "mintpal"))
-
-#We dont know how to get the VOLUME for mintpal currently, so not initializing this beyond the starting "0.0"
-
 db.close()
 
 f = open('/path/to/cryptsytrend.txt','w')
@@ -131,7 +123,4 @@ f.write(coinsedata["bid"])
 f.close()
 f = open('/path/to/btertrend.txt','w')
 f.write(bterdata["last"])
-f.close()
-f = open('/path/to/mintpaltrend.txt','w')
-f.write(mintpaldata[0]["last_price"])
 f.close()
