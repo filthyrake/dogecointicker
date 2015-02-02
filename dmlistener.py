@@ -52,13 +52,6 @@ for message in messages:
                 reply = f
                 user = message.sender_id
                 api.send_direct_message(user, text=reply)
-        if message.text.lower().find("mintpal") != -1:
-                filename=open('/path/to/mintpalvalue.txt','r')
-                f=filename.readline()
-                filename.close()
-                reply = f
-                user = message.sender_id
-                api.send_direct_message(user, text=reply)
 
 
 
