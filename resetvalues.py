@@ -5,6 +5,11 @@
 from __future__ import print_function
 import json
 import urllib2
+import ctypes
+libc = ctypes.cdll.LoadLibrary('libc.so.6')
+res_init = libc.__res_init
+
+res_init()
 
 cryptsyresponse = urllib2.urlopen('http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=132')
 cryptsydata = json.load(cryptsyresponse)
@@ -22,8 +27,6 @@ bterurl='http://data.bter.com/api/1/ticker/doge_btc'
 bterreq = urllib2.Request(bterurl, headers={"User-Agent" : "DogeCoin Ticker"})
 bterresponse = urllib2.urlopen(bterreq)
 bterdata = json.load(bterresponse)
-mintpalresponse = urllib2.urlopen('https://api.mintpal.com/v1/market/stats/DOGE/BTC')
-mintpaldata = json.load(mintpalresponse)
 
 f = open('/path/to/cryptsytrend.txt','w')
 f.write(cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"])
@@ -36,7 +39,4 @@ f.write(coinsedata["bid"])
 f.close()
 f = open('/path/to/btertrend.txt','w')
 f.write(bterdata["last"])
-f.close()
-f = open('/path/to/mintpaltrend.txt','w')
-f.write(mintpaldata[0]["last_price"])
 f.close()
