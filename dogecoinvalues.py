@@ -7,6 +7,11 @@ import urllib2
 import os
 import MySQLdb
 import ConfigParser
+import ctypes
+libc = ctypes.cdll.LoadLibrary('libc.so.6')
+res_init = libc.__res_init
+
+res_init()
 
 config = ConfigParser.ConfigParser()
 config.read("/path/to/appconfig")
@@ -38,8 +43,6 @@ bterresponse = urllib2.urlopen(bterreq)
 bterdata = json.load(bterresponse)
 coinbaseresponse = urllib2.urlopen('https://coinbase.com/api/v1/prices/buy')
 coinbasedata = json.load(coinbaseresponse)
-mintpalresponse = urllib2.urlopen('https://api.mintpal.com/v1/market/stats/DOGE/BTC')
-mintpaldata = json.load(mintpalresponse)
 
 #Get the initial day values from the DB
 dayvalue = "SELECT DAYVALUE FROM exchanges WHERE NAME = %s"
@@ -55,16 +58,12 @@ coinsedayvalue = cursor.fetchone()[0]
 cursor.execute(dayvalue, ("bter"))
 bterdayvalue = cursor.fetchone()[0]
 
-cursor.execute(dayvalue, ("mintpal"))
-mintpaldayvalue = cursor.fetchone()[0]
-
 #Set Current Values in the DB
 currentvaluesql = "UPDATE exchanges SET CURRENTVALUE = %s WHERE NAME = %s"
 cursor.execute(currentvaluesql, (cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"], "cryptsy"))
 cursor.execute(currentvaluesql, (vircurexdata["value"], "vircurex"))
 cursor.execute(currentvaluesql, (coinsedata["bid"], "coins-e"))
 cursor.execute(currentvaluesql, (bterdata["last"], "bter"))
-cursor.execute(currentvaluesql, (mintpaldata[0]["last_price"], "mintpal"))
 
 #Set Current Volumes in the DB
 volumesql = "UPDATE exchanges SET VOLUME = %s WHERE NAME = %s"
@@ -103,13 +102,6 @@ if bterdayvalue == bterdata["last"]:
 if bterdayvalue > bterdata["last"]:
 	btertrend = "down"
 
-if mintpaldayvalue < mintpaldata[0]["last_price"]:
-	mintpaltrend = "up"
-if mintpaldayvalue == mintpaldata[0]["last_price"]:
-	mintpaltrend = "stable"
-if mintpaldayvalue > mintpaldata[0]["last_price"]:
-	mintpaltrend = "down"
-
 lowest = cryptsydata["return"]["markets"]["DOGE"]["lasttradeprice"]
 if vircurexdata["value"] < lowest:
 	lowest = vircurexdata["value"]
@@ -117,8 +109,6 @@ if coinsedata["bid"] < lowest:
 	lowest = coinsedata["bid"]
 if bterdata["last"] < lowest:
 	lowest = bterdata["last"]
-if mintpaldata[0]["last_price"] < lowest:
-	lowest = mintpaldata[0]["last_price"]
 
 f = open('/path/to/coinbasevalue.txt','w')
 f.write('Average Dogecoin value' + lowest + '\n')
@@ -132,7 +122,6 @@ f.write('Current value of DOGE in BTC:' +' Cryptsy: ' + cryptsydata["return"]["m
 f.write('Current value of DOGE in BTC:' +' Vircurex: '+ vircurexdata["value"] + " -- Volume: " + vircurexvoldata["value"] + " Today's trend: " + vircurextrend + " \n")
 f.write('Current value of DOGE in BTC:' +' COINS-E: ' + coinsedata["bid"] + " -- Volume: " + coinsedata["total_ask_q"] + " Today's trend: " + coinsetrend + " \n")
 f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend + " \n")
-f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend + " \n")
 f.write('Current approx. value of 1M DOGE in USD: ' + str(dogeinusd) + " #dogecoin \n")
 f.write('Direct message me with the name of one of the exchanges I check to get more current information \n')
 f.close()
@@ -151,8 +140,4 @@ f.close()
 
 f = open('/path/to/btervalue.txt','w')
 f.write('Current value of DOGE in BTC:' +' BTER: ' + bterdata["last"] + " -- Volume: " + str(bterdata["vol_doge"]) + " Today's trend: " + btertrend)
-f.close()
-
-f = open('/path/to/mintpalvalue.txt','w')
-f.write('Current value of DOGE in BTC:' +' mintpal: ' + mintpaldata[0]["last_price"] + " -- Volume: Unknown" + " Today's trend: " + mintpaltrend)
 f.close()
