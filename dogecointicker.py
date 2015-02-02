@@ -22,9 +22,6 @@ api = tweepy.API(auth)
 filename=open(argfile,'r')
 f=filename.readlines()
 filename.close()
-
-for status in tweepy.Cursor(api.user_timeline).items():
-	api.destroy_status(status.id)
  
 for line in f:
 	api.update_status(status=line)
